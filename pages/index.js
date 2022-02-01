@@ -1,28 +1,27 @@
+import Head from "next/head";
+import { Fragment } from "react";
 import MeetUpList from "../components/MeetUp/MeetUpList"
 
-const DUMMY_LIST=[{
-  id: 'm1',
-  title: 'A First Meetup',
-  image:
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg',
-  address: 'Some address 5, 12345 Some City',
-  description: 'This is a first meetup!',
-},
-{
-  id: 'm2',
-  title: 'A Second Meetup',
-  image:
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/1280px-Stadtbild_M%C3%BCnchen.jpg',
-  address: 'Some address 10, 12345 Some City',
-  description: 'This is a second meetup!',
-},];
 const HomePage=(props)=>{
-  return <MeetUpList MeetUpList={props.meetUps}/>
+  return <Fragment>
+  <Head>
+  <title>MeetUpData</title>
+  <meta name='description' content='Meetup places'></meta>
+  </Head>
+  <MeetUpList MeetUpList={props.meetUps}/>
+  </Fragment>
 }
 
 export const getStaticProps = async()=>{
-  return {
-    props:{meetUps:DUMMY_LIST}
+
+  const response = await fetch("http://localhost:3000/api/new-meetup",{
+    method:'GET',
+    headers:{
+        'Content-Type':'application/json',
+    }})
+    const data = await response.json();
+    return {
+    props:{meetUps:data.meetups}
   }
 }
 export default HomePage;
